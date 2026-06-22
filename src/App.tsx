@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useAuthStore } from '@/stores/authStore';
 import { useUIStore } from '@/stores/uiStore';
 import { LoginPage } from '@/pages/LoginPage';
+import { HomePage } from '@/pages/HomePage';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -24,7 +25,7 @@ export function App() {
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/login/callback" element={<LoginPage />} />
-          <Route path="/*" element={<RequireAuth><div className="flex items-center justify-center h-screen text-text-secondary">加载中...</div></RequireAuth>} />
+          <Route path="/" element={<RequireAuth><HomePage /></RequireAuth>} />
         </Routes>
       </BrowserRouter>
     </QueryClientProvider>
