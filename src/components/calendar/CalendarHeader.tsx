@@ -1,4 +1,6 @@
+import type { CalendarView } from '@/types';
 import { Button } from '@/components/ui';
+import { ViewToggle } from './ViewToggle';
 
 interface CalendarHeaderProps {
   label: string;
@@ -6,9 +8,11 @@ interface CalendarHeaderProps {
   onNext: () => void;
   onToday: () => void;
   onToggleCalendar?: () => void;
+  view: CalendarView;
+  onViewChange: (view: CalendarView) => void;
 }
 
-export function CalendarHeader({ label, onPrev, onNext, onToday, onToggleCalendar }: CalendarHeaderProps) {
+export function CalendarHeader({ label, onPrev, onNext, onToday, onToggleCalendar, view, onViewChange }: CalendarHeaderProps) {
   return (
     <div className="flex items-center justify-between px-4 py-2 bg-card border-b border-border shrink-0">
       <div className="flex items-center gap-2">
@@ -16,7 +20,8 @@ export function CalendarHeader({ label, onPrev, onNext, onToday, onToggleCalenda
         <Button variant="ghost" size="sm" onClick={onNext} aria-label="下一周">→</Button>
         <h2 className="text-sm font-semibold text-text-primary ml-2">{label}</h2>
       </div>
-      <div className="flex items-center gap-0.5">
+      <div className="flex items-center gap-1.5">
+        <ViewToggle view={view} onChange={onViewChange} />
         <Button variant="ghost" size="sm" onClick={onToday}>今天</Button>
         {onToggleCalendar && (
           <Button variant="ghost" size="sm" onClick={onToggleCalendar} aria-label="收起日历">
