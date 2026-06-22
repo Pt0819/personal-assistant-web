@@ -52,8 +52,7 @@ export function SplitPane({ left, right }: SplitPaneProps) {
     <div ref={containerRef} className="flex flex-1 overflow-hidden">
       <div style={{ width: `${splitRatio}%` }} className="min-w-0">{left}</div>
       <div className={cn('w-1 bg-border hover:bg-brand cursor-col-resize shrink-0 transition-colors', dragging && 'bg-brand')} onMouseDown={handleMouseDown} role="separator" aria-orientation="vertical" aria-label="拖拽调节面板宽度" />
-      <div style={{ width: `${100 - splitRatio}%` }} className="min-w-0 relative">
-        <button onClick={toggleCalendar} className="absolute top-2 right-2 z-10 text-text-tertiary hover:text-text-primary text-xs px-1" aria-label="收起日历">▶ 收起日历</button>
+      <div style={{ width: `${100 - splitRatio}%` }} className="min-w-0">
         {right}
       </div>
     </div>

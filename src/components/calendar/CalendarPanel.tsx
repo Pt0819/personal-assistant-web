@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { Schedule } from '@/types';
 import { useCalendar } from '@/hooks/useCalendar';
+import { useUIStore } from '@/stores/uiStore';
 import { getWeekLabel, getWeekStart } from '@/utils/date';
 import { CalendarHeader } from './CalendarHeader';
 import { ViewToggle } from './ViewToggle';
@@ -15,6 +16,7 @@ export function CalendarPanel({ highlightDate }: CalendarPanelProps) {
   const [view] = useState<'week' | 'day'>('week');
   const [selectedEvent, setSelectedEvent] = useState<Schedule | null>(null);
   const { schedulesByDate, isLoading, error } = useCalendar(currentDate);
+  const toggleCalendar = useUIStore((s) => s.toggleCalendar);
 
   const handlePrev = () => setCurrentDate((d) => { const n = new Date(d); n.setDate(n.getDate() - 7); return n; });
   const handleNext = () => setCurrentDate((d) => { const n = new Date(d); n.setDate(n.getDate() + 7); return n; });
@@ -25,7 +27,7 @@ export function CalendarPanel({ highlightDate }: CalendarPanelProps) {
   if (error) {
     return (
       <div className="flex flex-col h-full">
-        <CalendarHeader label={weekLabel} onPrev={handlePrev} onNext={handleNext} onToday={handleToday} />
+        <CalendarHeader label={weekLabel} onPrev={handlePrev} onNext={handleNext} onToday={handleToday} onToggleCalendar={toggleCalendar} />
         <div className="flex-1 flex items-center justify-center"><div className="text-center"><p className="text-text-secondary mb-2">加载失败</p><button onClick={() => window.location.reload()} className="text-brand hover:underline text-sm">点击重试</button></div></div>
       </div>
     );
@@ -33,7 +35,7 @@ export function CalendarPanel({ highlightDate }: CalendarPanelProps) {
 
   return (
     <div className="flex flex-col h-full relative">
-      <CalendarHeader label={weekLabel} onPrev={handlePrev} onNext={handleNext} onToday={handleToday} />
+      <CalendarHeader label={weekLabel} onPrev={handlePrev} onNext={handleNext} onToday={handleToday} onToggleCalendar={toggleCalendar} />
       <div className="absolute top-2 right-20 z-10"><ViewToggle view={view} onChange={() => {}} /></div>
       {isLoading ? (
         <div className="flex-1 p-2"><div className="w-full h-full bg-gray-100 dark:bg-gray-800 animate-pulse rounded-lg" /></div>
