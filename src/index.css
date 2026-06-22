@@ -1,6 +1,29 @@
 @import "tailwindcss";
 @import "./theme.css";
 
+@theme inline {
+  --color-bg: var(--color-bg);
+  --color-card: var(--color-card);
+  --color-ai-bubble: var(--color-ai-bubble);
+  --color-user-bubble: var(--color-user-bubble);
+  --color-text-primary: var(--color-text-primary);
+  --color-text-secondary: var(--color-text-secondary);
+  --color-text-tertiary: var(--color-text-tertiary);
+  --color-brand: var(--color-brand);
+  --color-brand-hover: var(--color-brand-hover);
+  --color-brand-active: var(--color-brand-active);
+  --color-danger: var(--color-danger);
+  --color-danger-hover: var(--color-danger-hover);
+  --color-success: var(--color-success);
+  --color-warning: var(--color-warning);
+  --color-border: var(--color-border);
+  --color-input-bg: var(--color-input-bg);
+  --color-today-bg: var(--color-today-bg);
+  --color-time-indicator: var(--color-time-indicator);
+  --color-ai-border: var(--color-ai-border);
+  --color-bg-hover: var(--color-bg-hover);
+}
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
   -webkit-font-smoothing: antialiased;
