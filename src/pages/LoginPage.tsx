@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
+import { useAuthStore } from '@/stores/authStore';
+import { postDevLogin } from '@/services/auth';
 import type { StatusResponse } from '@/types';
 
 export function LoginPage() {
@@ -12,6 +14,24 @@ export function LoginPage() {
   const [scannedUser, setScannedUser] = useState<{ nickname?: string; avatar_url?: string }>({});
   const [error, setError] = useState<string | null>(null);
   const pollRef = useRef(false);
+  const attemptedRef = useRef(false);
+
+  // Dev mode: try auto-login first
+  useEffect(() => {
+    if (attemptedRef.current) return;
+    attemptedRef.current = true;
+
+    postDevLogin()
+      .then((result) => {
+        useAuthStore.getState().login(result.access_token, result.refresh_token, result.user);
+        const preLoginPath = sessionStorage.getItem('preLoginPath');
+        sessionStorage.removeItem('preLoginPath');
+        navigate(preLoginPath || '/', { replace: true });
+      })
+      .catch(() => {
+        // Dev login failed — proceed with normal QR flow below
+      });
+  }, [navigate]);
 
   // Handle WeChat callback redirect (temp_token in URL)
   useEffect(() => {
@@ -30,31 +50,39 @@ export function LoginPage() {
     }
   }, [searchParams, pollStatus]);
 
-  // Fetch QR code on mount
+  // Fetch QR code on mount (only if dev login didn't redirect us)
   useEffect(() => {
     if (searchParams.get('temp_token')) return;
     let cancelled = false;
-    login()
-      .then((result) => {
-        if (!cancelled) {
-          setQrcodeUrl(result.qrcode_url);
-          setStatus('pending');
-          pollStatus(result.temp_token, (s: StatusResponse) => {
-            if (!cancelled) {
-              setStatus(s.status);
-              if (s.status === 'scanned') {
-                setScannedUser({ nickname: s.nickname, avatar_url: s.avatar_url });
+    // Small delay to let dev login attempt complete first
+    const timer = setTimeout(() => {
+      if (cancelled) return;
+      login()
+        .then((result) => {
+          if (!cancelled) {
+            setQrcodeUrl(result.qrcode_url);
+            setStatus('pending');
+            pollStatus(result.temp_token, (s: StatusResponse) => {
+              if (!cancelled) {
+                setStatus(s.status);
+                if (s.status === 'scanned') {
+                  setScannedUser({ nickname: s.nickname, avatar_url: s.avatar_url });
+                }
               }
-            }
-          }).catch((err: Error) => {
-            if (!cancelled) { setError(err.message); setStatus('error'); }
-          });
-        }
-      })
-      .catch((err: Error) => {
-        if (!cancelled) { setError(err.message); setStatus('error'); }
-      });
-    return () => { cancelled = true; };
+            }).catch((err: Error) => {
+              if (!cancelled) { setError(err.message); setStatus('error'); }
+            });
+          }
+        })
+        .catch((err: Error) => {
+          if (!cancelled) { setError(err.message); setStatus('error'); }
+        });
+    }, 1000);
+
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
   }, [login, pollStatus, searchParams]);
 
   const handleRefresh = () => window.location.reload();

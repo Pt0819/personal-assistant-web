@@ -24,3 +24,14 @@ export async function logout(): Promise<void> {
 export async function fetchUserProfile(): Promise<User> {
   return api.get<User>('/user/profile');
 }
+
+export interface DevLoginResponse {
+  access_token: string;
+  refresh_token: string;
+  expires_in: number;
+  user: User;
+}
+
+export async function postDevLogin(): Promise<DevLoginResponse> {
+  return api.post<DevLoginResponse>('/auth/dev/login');
+}
