@@ -1,0 +1,12 @@
+export const ACCESS_TOKEN_EXPIRY = 2 * 60 * 60;
+export const REFRESH_BEFORE_EXPIRY = 60;
+export const POLL_INTERVAL = 2000;
+export const CHAT_TIMEOUT = 15000;
+export const MESSAGE_PREVIEW_LENGTH = 50;
+export const DEFAULT_SPLIT_RATIO = 55;
+export const MIN_CHAT_WIDTH = 480;
+export const MIN_CALENDAR_WIDTH = 420;
+export const HOUR_ROW_HEIGHT = 60;
+export const CALENDAR_START_HOUR = 8;
+export const CALENDAR_END_HOUR = 22;
+export const MAX_MESSAGE_LENGTH = 2000;
