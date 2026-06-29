@@ -1,10 +1,20 @@
 // ==================== User ====================
 export interface User {
   id: number;
-  openid: string;
+  openid?: string;
+  username: string;
   nickname: string;
   avatar_url: string;
+  email?: string;
   phone?: string;
+  auth_method: 'wechat' | 'email' | 'phone';
+}
+
+export interface LoginResponse {
+  access_token: string;
+  refresh_token: string;
+  expires_in: number;
+  user: User;
 }
 
 // ==================== Auth ====================
