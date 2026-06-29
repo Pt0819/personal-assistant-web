@@ -5,6 +5,10 @@ import { useAuthStore } from '@/stores/authStore';
 import { useUIStore } from '@/stores/uiStore';
 import { configureClient } from '@/services/client';
 import { LoginPage } from '@/pages/LoginPage';
+import { CredentialLoginPage } from '@/pages/CredentialLoginPage';
+import { RegisterPage } from '@/pages/RegisterPage';
+import { RegisterEmailPage } from '@/pages/RegisterEmailPage';
+import { RegisterPhonePage } from '@/pages/RegisterPhonePage';
 import { HomePage } from '@/pages/HomePage';
 
 const queryClient = new QueryClient({
@@ -48,6 +52,10 @@ function AppRoutes() {
     <Routes>
       <Route path="/login" element={<LoginPage />} />
       <Route path="/login/callback" element={<LoginPage />} />
+      <Route path="/login/credential" element={<CredentialLoginPage />} />
+      <Route path="/register" element={<RegisterPage />} />
+      <Route path="/register/email" element={<RegisterEmailPage />} />
+      <Route path="/register/phone" element={<RegisterPhonePage />} />
       <Route path="/" element={<RequireAuth><HomePage /></RequireAuth>} />
     </Routes>
   );
