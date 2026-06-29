@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { useAuthStore } from '@/stores/authStore';
 import { postDevLogin } from '@/services/auth';
@@ -127,6 +127,10 @@ export function LoginPage() {
         )}
 
         <p className="text-text-tertiary text-xs mt-6">使用微信扫描二维码登录</p>
+
+        <div className="mt-4 pt-4 border-t border-border text-center">
+          <Link to="/login/credential" className="text-brand hover:underline text-sm">账号登录</Link>
+        </div>
       </div>
     </div>
   );
