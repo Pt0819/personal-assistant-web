@@ -30,6 +30,13 @@ export const useAuthStore = create<AuthState>()(
     }),
     {
       name: 'auth-storage',
+      version: 1,
+      migrate: (persisted, version) => {
+        if (version === 0) {
+          return { user: null, jwt: null, refreshToken: null, isAuthenticated: false };
+        }
+        return persisted as AuthState;
+      },
       partialize: (state) => ({
         jwt: state.jwt,
         refreshToken: state.refreshToken,
