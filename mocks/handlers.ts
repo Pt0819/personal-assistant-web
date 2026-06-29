@@ -6,8 +6,10 @@ const API_BASE = '/api/v1';
 const mockUser = {
   id: 1,
   openid: 'test-openid',
+  username: '小助手_test',
   nickname: '测试用户',
   avatar_url: '',
+  auth_method: 'wechat' as const,
 };
 
 let mockSchedules: Array<Record<string, unknown>> = [
@@ -60,6 +62,55 @@ export const handlers = [
   // Auth: logout
   http.post(`${API_BASE}/auth/logout`, async () => {
     return HttpResponse.json({ code: 0, msg: '已登出', data: null });
+  }),
+
+  // Auth: send email code
+  http.post(`${API_BASE}/auth/register/send-email-code`, async () => {
+    return HttpResponse.json({ code: 0, msg: '验证码已发送', data: null });
+  }),
+
+  // Auth: send SMS code
+  http.post(`${API_BASE}/auth/register/send-sms-code`, async () => {
+    return HttpResponse.json({ code: 0, msg: '验证码已发送', data: null });
+  }),
+
+  // Auth: register by email
+  http.post(`${API_BASE}/auth/register/email`, async () => {
+    return HttpResponse.json({
+      code: 0, msg: '成功',
+      data: {
+        access_token: 'mock-jwt-token',
+        refresh_token: 'mock-refresh-token',
+        expires_in: 7200,
+        user: { ...mockUser, id: 2, openid: undefined, auth_method: 'email', email: 'new@example.com', username: '小助手_new1' },
+      },
+    });
+  }),
+
+  // Auth: register by phone
+  http.post(`${API_BASE}/auth/register/phone`, async () => {
+    return HttpResponse.json({
+      code: 0, msg: '成功',
+      data: {
+        access_token: 'mock-jwt-token',
+        refresh_token: 'mock-refresh-token',
+        expires_in: 7200,
+        user: { ...mockUser, id: 3, openid: undefined, auth_method: 'phone', phone: '13800138000', username: '小助手_new2' },
+      },
+    });
+  }),
+
+  // Auth: credential login
+  http.post(`${API_BASE}/auth/login/credential`, async () => {
+    return HttpResponse.json({
+      code: 0, msg: '成功',
+      data: {
+        access_token: 'mock-jwt-token',
+        refresh_token: 'mock-refresh-token',
+        expires_in: 7200,
+        user: { ...mockUser, id: 1, auth_method: 'email', email: 'user@example.com' },
+      },
+    });
   }),
 
   // Conversations
